@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/13 19:11:04 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/14 16:09:44 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define FDF_H
 
 #include "libft.h"
+
+# define DEFAULT_COLOR	0x0032A852
 
 typedef struct			s_read
 {
@@ -29,6 +31,12 @@ typedef struct			s_pixel
 	int					z : sizeof(int) * BITS_AT_BYTE;
 	int					color : sizeof(int) * BITS_AT_BYTE;
 }                       t_pixel;
+
+typedef union			u_remake
+{
+	t_pixel				pixel;
+	void				*pixel_as_ptr;
+}						t_remake;
 
 typedef struct			s_map
 {
