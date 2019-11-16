@@ -52,5 +52,10 @@ Mkfile.old
 dkms.conif
 
 # other
-lem-in
 .DS_Store
+CMakeLists.txt
+.idea
+cmake-build-debug
+a.out
+minilibx
+libft

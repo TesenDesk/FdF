@@ -12,11 +12,14 @@
 
 #include "fdf.h"
 
+int early_mlx_init(t_fdf *fdf);
+
 int					main(int argc, char **argv)
 {
 	t_fdf			fdf;
 
 	if (validate_read_and_parse(argc, argv, &fdf) == FAILURE)
 		return (FAILURE);
+	early_mlx_init(&fdf);
 	return (SUCCESS);
 }

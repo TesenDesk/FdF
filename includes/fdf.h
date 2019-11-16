@@ -25,6 +25,10 @@
 */
 
 # define DEFAULT_COLOR	0x0032A852
+# define SCREEN_WIDTH	1600
+# define SCREEN_HEIGHT	1200
+# define SCREEN_TITLE	"????????????"
+
 
 /*
 **---------------------------------READER---------------------------------------
@@ -108,11 +112,18 @@ typedef struct			s_mutation
 **-------------------------------------FDF--------------------------------------
 */
 
+typedef struct			s_mlx
+{
+	void				*mlx;
+	void 				*win;
+}						t_mlx;
+
 typedef struct          s_fdf
 {
 	t_read				reader;
 	t_map				map;
 	t_mutation			mutation;
+	t_mlx				mlx;
 }                       t_fdf;
 
 /*

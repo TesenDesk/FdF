@@ -25,16 +25,27 @@ NAME_HDR_DIR	:=	./includes/
 NAME_OBJ_DIR	:=	$(NAME_DIR)src/
 NAME_SRC_DIR	:=	$(NAME_DIR)src/
 PARSER_DIR		:=	$(NAME_SRC_DIR)parser/
+MLX_I_DIR	:=	$(NAME_DIR)
 #------------------------------------files-------------------------------------#
 NAME			:=	fdf
 MAIN_SRC		:=	$(addprefix $(NAME_SRC_DIR),main.c)
+MLX_I_SRC		:=	$(addprefix $(MLX_I_DIR), main.c)
 PARSER_SRC		:=	$(addprefix $(PARSER_DIR), parser.c)
-SRC				:=	$(MAIN_SRC) $(PARSER_SRC)
+SRC				:=	$(MAIN_SRC) $(PARSER_SRC) $(MLX_I_SRC)
 OBJ				:=	$(patsubst %.c,%.o, $(SRC))
 #----------------------------------includes------------------------------------#
 LIB_HDR			:=	$(LIB_HDR_DIR)libft.h
 NAME_HDR		:=	$(NAME_HDR_DIR)fdf.h
 HEADERS			:=	$(LIB_HDR) $(NAME_HDR)
+
+#================================COLORS & Co===================================#
+GREEN =		\033[1;32m
+RED =		\033[1;31m
+RST =		\033[0m
+BOLD =		\033[1m
+CYAN =		\033[1;36m
+PREFIX =	[$(CYAN)$(NAME)$(RST)]:\t\t
+
 #------------------------------------flags-------------------------------------#
 ifeq ($(DEBUG), 1)
 	CFLAGS		:=	-Wall -Wextra -Werror -g
@@ -44,13 +55,7 @@ else
 	DEBUGMSG	:= $(PREFIX)⚠️  \033[1;33mDebug mode $(RED)disabled.$(RST)\n
 endif
 LIB_FLAGS		:=	-L$(LIB_DIR) -lft
-HDR_FLAGS		:=	-I$(NAME_HDR_DIR) -I$(LIB_HDR_DIR)#================================COLORS & Co===================================#
-GREEN =		\033[1;32m
-RED =		\033[1;31m
-RST =		\033[0m
-BOLD =		\033[1m
-CYAN =		\033[1;36m
-PREFIX =	[$(CYAN)$(NAME)$(RST)]:\t
+HDR_FLAGS		:=	-I$(NAME_HDR_DIR) -I$(LIB_HDR_DIR)
 
 #===================================RULES======================================#
 all:				lib $(NAME)
