@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/14 23:56:52 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:48:17 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int					prepare_storage_for_reading_lines(t_read *reader)
 	return (SUCCESS);
 }
 
-int					prepare_storage_for_recognized_card_information(
+int					prepare_storage_for_recognized_map_information(
 						t_map *map)
 {
 	if (ft_vector_init(&map->bit_map))
@@ -268,7 +268,7 @@ int					validate_read_and_parse(int argc, char **argv, t_fdf *fdf)
 	if (
 			!use_terminal_arguments_to_open_a_file(argc, argv, &fdf->reader) &&
 			!prepare_storage_for_reading_lines(&fdf->reader) &&
-			!prepare_storage_for_recognized_card_information(&fdf->map) &&
+			!prepare_storage_for_recognized_map_information(&fdf->map) &&
 			!read_and_parse_the_file(fdf))
 		return (SUCCESS);
 	return (FAILURE);
