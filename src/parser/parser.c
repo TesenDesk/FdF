@@ -58,7 +58,7 @@ int					read_a_line_and_put_it_into_an_array(t_read *reader)
 {
 	char			*line;
 
-	if ((reader->read_state = ft_getline(reader->fd, &line)) > 0 &&
+	if ((reader->read_state = ft_get_next_line(reader->fd, &line)) > 0 &&
 			!ft_vector_add(&reader->lines, (void *)line))
 		return (SUCCESS);
 	return (FAILURE);
@@ -87,7 +87,7 @@ void				move_top_out_of_substring_number(char **top)
 	char			*str;
 
 	str = *top;
-	while (ft_isdigit(*str))
+	while (ft_isdigit(*str) || *str == '+' || *str == '-')
 		++str;
 	*top = str;
 	return ;
@@ -254,11 +254,18 @@ int					parse_remaining_lines_and_recognizing_the_max_ordinate(
 	return (SUCCESS);
 }
 
+void				count_applicate(t_fdf *fdf)
+{
+	fdf->map.length = (fdf->reader.z_max - fdf->reader.z_min);
+	return ;
+}
+
 int					read_and_parse_the_file(t_fdf *fdf)
 {
 	read_a_line_and_put_it_into_an_array(&fdf->reader);
 	parse_first_line_and_recognizing_the_max_abscissa(fdf);
 	parse_remaining_lines_and_recognizing_the_max_ordinate(fdf);
+	count_applicate(fdf);
 	return (SUCCESS);
 }
 
