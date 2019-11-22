@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/15 17:48:17 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/22 22:28:32 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,16 @@ void				set_default_color(t_pixel *pixel)
 void				convert_string_to_color_number(char **top, t_pixel *pixel)
 {
 	char			*str;
+	char			*end;
+	uintmax_t		color;
 
 	str = *top;
 	++str;
-	set_default_color(pixel);
-	*top = str;
-	// TODO: реализвать atoi_base для преобразования цвета.
+	*end = NULL;
+	if (ft_str_to_uintmax(str, &end, 16, &color))
+		set_default_color(pixel);
+	pixel->color = (int)color;
+	*top = end ? end : str;
 	return ;
 }
 
@@ -121,7 +125,6 @@ void				move_top_out_of_color_substring(char **top)
 	char			*str;
 
 	str = *top;
-	str +=2;
 	while (*str && !ft_isspace(*str))
 		++str;
 	*top = str;
