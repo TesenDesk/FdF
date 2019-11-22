@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/22 22:28:32 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/22 22:59:32 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,14 @@ int					has_color_characteristic(char c)
 
 void				set_default_color(t_pixel *pixel)
 {
-	pixel->color = DEFAULT_COLOR;
+	if (pixel->z <= 0)
+		pixel->color = BLUE_COLOR;
+	else if (pixel->z <= 200)
+		pixel->color = GREEN_COLOR;
+	else if (pixel->z <= 5000)
+		pixel->color = BROWN_COLOR;
+	else
+		pixel->color = WHITE_COLOR;
 	return ;
 }
 
@@ -112,7 +119,7 @@ void				convert_string_to_color_number(char **top, t_pixel *pixel)
 
 	str = *top;
 	++str;
-	*end = NULL;
+	end = NULL;
 	if (ft_str_to_uintmax(str, &end, 16, &color))
 		set_default_color(pixel);
 	pixel->color = (int)color;
