@@ -99,6 +99,18 @@ typedef struct			s_cordcase
 	int					y;
 }						t_cordcase;
 
+typedef struct			s_wire
+{
+	t_cordcase			from;
+	t_cordcase			to;
+	int					dx;
+	int					dy;
+	int					sign_x;
+	int					sign_y;
+	int					color;
+}						t_wire;
+
+
 typedef struct			s_read
 {
 	int					fd;
