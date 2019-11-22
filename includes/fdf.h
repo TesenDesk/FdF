@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/22 23:57:22 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 00:37:44 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,18 @@
 
 typedef enum			e_elevations
 {
-	HADOPELAGIC_COLOR = 0x000237,
-	ABYSSALOPELAGIC_1_COLOR = 0x000876,
-	ABYSSALOPELAGIC_2_COLOR = 0x0019d2,
-	BATHYPELAGIC_COLOR = 0x2c6cf6,
-	MESOPELAGIC_COLOR = 0x60ccfa0,
-	PLAIN = 0x78fbfd0,
-	HIGHLAND = 0x326e3a0,
-	PLATEAUS = 0xa8d78c,
-	LOW_MOUNTAIN = 0xccac370,
-	MEDIUM_MOUNTAIN = 0x9c7c0b0,
-	HIGH_MOUNTAIN = 0x4608730,
-	HIGHEST_MOUNTAIN = 0xd4ced9
+	HADOPELAGIC_COLOR = 0x00000237,
+	ABYSSALOPELAGIC_1_COLOR = 0x00000876,
+	ABYSSALOPELAGIC_2_COLOR = 0x000019d2,
+	BATHYPELAGIC_COLOR = 0x002c6cf6,
+	MESOPELAGIC_COLOR = 0x0060ccfa0,
+	PLAIN = 0x0020f5ee,
+	HIGHLAND = 0x002ea64a,
+	PLATEAUS = 0x00d1cb13,
+	LOW_MOUNTAIN = 0x00cdbad14,
+	MEDIUM_MOUNTAIN = 0x00826811,
+	HIGH_MOUNTAIN = 0x00473804,
+	HIGHEST_MOUNTAIN = 0x00d4ced9
 }						t_elevations;
 
 # define CHANGE_MOVE	10

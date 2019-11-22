@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 00:23:12 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 00:31:34 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,27 +100,27 @@ int					has_color_characteristic(char c)
 
 void				set_default_color(t_pixel *pixel)
 {
-	if (pixel->z <= -10000)
+	if (pixel->z <= -800)
 		pixel->color = HADOPELAGIC_COLOR;
-	else if (pixel->z <= -6000)
+	else if (pixel->z <= -600)
 		pixel->color = ABYSSALOPELAGIC_1_COLOR;	
-	else if (pixel->z <= -4000)
+	else if (pixel->z <= -400)
 		pixel->color = ABYSSALOPELAGIC_2_COLOR;
-	else if (pixel->z <= -2000)
+	else if (pixel->z <= -200)
 		pixel->color = BATHYPELAGIC_COLOR;
 	else if (pixel->z <= 0)
 		pixel->color = MESOPELAGIC_COLOR;
-	else if (pixel->z <= 200)
+	else if (pixel->z <= 20)
 		pixel->color = PLAIN;
-	else if (pixel->z <= 500)
+	else if (pixel->z <= 50)
 		pixel->color = HIGHLAND;
-	else if (pixel->z <= 1000)
+	else if (pixel->z <= 100)
 		pixel->color = PLATEAUS;
-	else if (pixel->z <= 2000)
+	else if (pixel->z <= 200)
 		pixel->color = LOW_MOUNTAIN;
-	else if (pixel->z <= 4000)
+	else if (pixel->z <= 400)
 		pixel->color = MEDIUM_MOUNTAIN;
-	else if (pixel->z <= 6000)
+	else if (pixel->z <= 600)
 		pixel->color = HIGH_MOUNTAIN;
 	else
 		pixel->color = HIGHEST_MOUNTAIN;
