@@ -3,13 +3,7 @@
 #include "fdf.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-#define X_AXIS	0
-#define Y_AXIS	1
-#define Z_AXIS	2
-#define ROT_L	0
-#define ROT_R	1
-
+/*
 typedef struct s_params
 {
 		int color;
@@ -20,17 +14,7 @@ typedef struct s_params
 		void *win;
 		int size;
 }				t_params;
-
-typedef struct	s_wire
-{
-	t_cordcase	from;
-	t_cordcase	to;
-	int		dx;
-	int		dy;
-	int		sign_x;
-	int		sign_y;
-}				t_wire;
-
+*/
 int close_pls(void *param)
 {
 	(void)param;
@@ -121,7 +105,7 @@ int		get_x_pc(t_fdf *f, int i)
 }
 */
 
-void	perform_potation(t_fdf *fdf, int i, t_cordcase *ret)
+void	perform_rotation(t_fdf *fdf, int i, t_cordcase *ret)
 {
 	long x_map; // положение точки на карте
 	long y_map;
@@ -130,23 +114,20 @@ void	perform_potation(t_fdf *fdf, int i, t_cordcase *ret)
 	long double x_rad; // вращение (сразу в радианах (чобы и нет))
 	long double y_rad;
 	long double z_rad;
-	long x_shift; // зум (расстояние между двумя соседними тощками
+	long x_shift; // смещение карты относительно чего-нибудь
 	long y_shift;
-	long z_shift; // HUH? по z собрался двигать? por favor?
-	long x_stretch; // смещение карты относительно чего-нибудь
+	long x_stretch; // скеил (расстояние между двумя соседними тощками)
 	long y_stretch;
 	long z_stretch;
 	long x; // а это короч координты пикселя (то, что нужно нарисоватт)
 	long y;
 	long z; // хз хачем тут z но пусть будет
-	int color;
 
 	//Получаем координаты точки с карты! НЕ координты пикселя!!!!1111
 	x_map = i % fdf->map.width;
 	y_map = i / fdf->map.width;
 	r.pixel_as_ptr = fdf->map.bit_map.items[i];
 	z_map = r.pixel.z;
-	color = r.pixel.color;
 
 	// Задаем параметры, мать их
 	x_stretch = fdf->mutation.stretch.x;
@@ -154,7 +135,6 @@ void	perform_potation(t_fdf *fdf, int i, t_cordcase *ret)
 	z_stretch = fdf->mutation.stretch.z;
 	x_shift = fdf->mutation.shift.x;
 	y_shift = fdf->mutation.shift.y;
-	z_shift = fdf->mutation.shift.z;
 	x_rad = fdf->mutation.tilt.x * PI / 180;
 	y_rad = fdf->mutation.tilt.y * PI / 180;
 	z_rad = fdf->mutation.tilt.z * PI / 180;
@@ -168,27 +148,26 @@ void	perform_potation(t_fdf *fdf, int i, t_cordcase *ret)
 
 	x_map -= (fdf->map.width - 1) * x_stretch / 2;
 	y_map -= (fdf->map.height - 1) * y_stretch / 2;
-	//z_map += (fdf->map.length - 1) * z_stretch / 2;
 
 	// Поворот по оси ЫКС
 
 	x = x_map;
-	y = (long)((y_map * cosl(x_rad) * MULTIPLIER) - (z_map * sinl(x_rad)) * MULTIPLIER) / MULTIPLIER;
-	z = (long)((y_map * sinl(x_rad) * MULTIPLIER) + (z_map * cosl(x_rad)) * MULTIPLIER) / MULTIPLIER;
+	y = (y_map * (long)(cosl(x_rad) * MULTIPLIER) - z_map * (long)(sinl(x_rad) * MULTIPLIER)) / MULTIPLIER;
+	z = (y_map * (long)(sinl(x_rad) * MULTIPLIER) + z_map * (long)(cosl(x_rad) * MULTIPLIER)) / MULTIPLIER;
 
 	// Поворот по оси ЫГРЫК
 
 	x_map = x;
-	x = (long)((x_map * cosl(y_rad) * MULTIPLIER) + (z * sinl(y_rad)) * MULTIPLIER) / MULTIPLIER;
-	y = y;
+	x = (x_map * (long)(cosl(y_rad) * MULTIPLIER) + z * (long)(sinl(y_rad) * MULTIPLIER)) / MULTIPLIER;
+	//y = y;
 	//z = (long)((x_map * -sinl(y_rad) * MULTIPLIER) + (z * cosl(y_rad)) * MULTIPLIER) / MULTIPLIER;
 
 	// Поворот по оси ЗЕД
 
 	x_map = x;
 	y_map = y;
-	x = (long)((x_map * cosl(z_rad) * MULTIPLIER) - (y_map * sinl(z_rad) * MULTIPLIER)) / MULTIPLIER;
-	y = (long)((x_map * sinl(z_rad) * MULTIPLIER) + (y_map * cosl(z_rad) * MULTIPLIER)) / MULTIPLIER;
+	x = (x_map * (long)(cosl(z_rad) * MULTIPLIER) - y_map * (long)(sinl(z_rad) * MULTIPLIER)) / MULTIPLIER;
+	y = (x_map * (long)(sinl(z_rad) * MULTIPLIER) + y_map * (long)(cosl(z_rad) * MULTIPLIER)) / MULTIPLIER;
 	//z = z; // Z больше не нужОн, можем не писать его дальше!
 
 	x = (x * fdf->mutation.stretch.range) / 100;
@@ -313,21 +292,29 @@ void	rem_b(t_params *p)
  * .654.
  * ....
  */
-/*
-void	draw_square(t_params *p)
+
+void	draw_box(t_mlx *mlx, int w, int h,int where)
 {
 	int x;
+	int y;
+	int i;
 
-	x = p->x;
-	p->x += p->size * 5;
-	draw_line(p, p->size * 1, 3);
-	draw_line(p, p->size * 1, 1);
-	draw_line(p, p->size * 1, 7);
-	draw_line(p, p->size * 1, 5);
-
-	p->x = x;
+	x = where % SCREEN_WIDTH;
+	y = where / SCREEN_WIDTH;
+	i = w;
+	while (--i)
+		mlx_pixel_put(mlx->mlx, mlx->win, x++, y, WHITE_COLOR);
+	i = h;
+	while (--i)
+		mlx_pixel_put(mlx->mlx, mlx->win, x, y++, WHITE_COLOR);
+	i = w;
+	while (--i)
+		mlx_pixel_put(mlx->mlx, mlx->win, x--, y, WHITE_COLOR);
+	i = h;
+	while (--i)
+		mlx_pixel_put(mlx->mlx, mlx->win, x, y--, WHITE_COLOR);
 }
-
+/*
 void	draw_two(t_params *p)
 {
 	int x;
@@ -390,27 +377,6 @@ void	draw_rgb(t_params *p, int where)
 	p->y = y;
 }
 */
-/*
- * .....
- * .812.
- * .7*3.
- * .654.
- * ....
- */
-/*
-void rotate(t_params *p, int axis, int dir)
-{
-
-}*/
-
-
-double	ft_dabs(double a)
-{
-	if (a < 0)
-		return (-a);
-	return (a);
-}
-
 
 void	draw_line_between(t_fdf *fdf, t_wire *w)
 {
@@ -423,10 +389,10 @@ void	draw_line_between(t_fdf *fdf, t_wire *w)
 	x = w->from.x;
 	y = w->from.y;
 	e = w->dx + w->dy;
-	mlx_pixel_put(fdf->mlx.mlx, fdf->mlx.win, w->to.x, w->to.y, DEFAULT_COLOR);
+	mlx_pixel_put(fdf->mlx.mlx, fdf->mlx.win, w->to.x, w->to.y, w->color);
 	while (x != w->to.x || y != w->to.y)
 	{
-		mlx_pixel_put(fdf->mlx.mlx, fdf->mlx.win, x, y, DEFAULT_COLOR);
+		mlx_pixel_put(fdf->mlx.mlx, fdf->mlx.win, x, y, w->color);
 		ee = e * 2;
 		if (ee >= w->dy)
 		{
@@ -441,7 +407,7 @@ void	draw_line_between(t_fdf *fdf, t_wire *w)
 	}
 }
 
-int		need_to_draw_this(t_fdf *fdf, t_wire *w)
+int		need_to_draw_this(t_wire *w)
 {
 	if ((w->from.x >= 0 && w->from.x < SCREEN_WIDTH &&
 			w->from.y >= 0 && w->from.y < SCREEN_HEIGHT) ||
@@ -451,52 +417,66 @@ int		need_to_draw_this(t_fdf *fdf, t_wire *w)
 	return (0);
 }
 
-void	draw_connections_to_neighbours(t_fdf *fdf, int pos)
+void	draw_connection_if_necessary(t_fdf *fdf, t_wire *w)
 {
-	t_wire		w;
-	int			tmp;
-	int			i;
-
-	i = 0;
-	perform_potation(fdf, pos, &w.from);
-	while (++i <= 2)
+	if (need_to_draw_this(w))
 	{
-		if (i == 1 &&
-				(tmp = pos + fdf->map.width) / fdf->map.width < fdf->map.height)
-			perform_potation(fdf, tmp, &w.to);
-		else if (i == 2 && (pos + 1) % fdf->map.width &&
-			(tmp = pos + 1) / fdf->map.width <= fdf->map.height)
-			perform_potation(fdf, tmp, &w.to);
-		if (need_to_draw_this(fdf, &w))
-		{
-			w.dx = abs(w.to.x - w.from.x);
-			w.dy = abs(w.to.y - w.from.y);
-			w.sign_x = w.from.x > w.to.x ? -1 : 1;
-			w.sign_y = w.from.y > w.to.y ? -1 : 1;
-			draw_line_between(fdf, &w);
-		}
+		w->dx = abs(w->to.x - w->from.x);
+		w->dy = abs(w->to.y - w->from.y);
+		w->sign_x = w->from.x > w->to.x ? -1 : 1;
+		w->sign_y = w->from.y > w->to.y ? -1 : 1;
+		draw_line_between(fdf, w);
 	}
 }
 
-void	draw_four_pixels(t_fdf *fdf)
+
+void	draw_down(t_fdf * fdf, t_wire *w, int pos)
 {
-	//t_pixel		*p;
+	int		target;
+
+	target = pos + fdf->map.width;
+	if (target / fdf->map.width < fdf->map.height)
+	{
+		perform_rotation(fdf, target, &w->to);
+		draw_connection_if_necessary(fdf, w);
+	}
+}
+
+void	draw_left(t_fdf *fdf, t_wire *w, int pos)
+{
+	int target;
+
+	target = pos + 1;
+	if (target / fdf->map.width <= fdf->map.height && target % fdf->map.width)
+	{
+		perform_rotation(fdf, target, &w->to);
+		draw_connection_if_necessary(fdf, w);
+	}
+}
+
+void	draw_connections_to_neighbours(t_fdf *fdf, t_wire *w, int pos)
+{
+	t_remake		r;
+
+	if (!(pos % fdf->map.width))
+		perform_rotation(fdf, pos, &w->from);
+	else
+		w->from = w->to;
+	r.pixel_as_ptr = fdf->map.bit_map.items[pos];
+	w->color = r.pixel.color;
+	draw_down(fdf, w, pos);
+	draw_left(fdf, w, pos);
+}
+
+void	draw_map(t_fdf *fdf)
+{
+	t_wire		w;
 	int			i;
 
 	i = -1;
-
-	//mlx_pixel_put(fdf->mlx.mlx, fdf->mlx.win, get_x_pc(fdf, i), get_y_pc(fdf, i), p->color);
 	while (++i < fdf->map.size)
-		draw_connections_to_neighbours(fdf, i);
+		draw_connections_to_neighbours(fdf, &w, i);
 }
-
-/*
- * .....
- * .812.
- * .7*3.
- * .654.
- * ....
- */
 
 void	change_range(t_fdf *fdf, int mode)
 {
@@ -523,7 +503,7 @@ void	change_stretch(t_fdf *fdf, int x_mode, int y_mode, int z_mode)
 	{
 		fdf->mutation.stretch.x = DEFAULT_STRETH;
 		fdf->mutation.stretch.y = DEFAULT_STRETH;
-		fdf->mutation.stretch.z = DEFAULT_STRETH;
+		fdf->mutation.stretch.z = DEFAULT_STRETH / 2;
 		return ;
 	}
 	if ((tmp = fdf->mutation.stretch.x + CHANGE_STRETCH * x_mode) > 0)
@@ -542,9 +522,9 @@ void change_rotate(t_fdf *fdf, int x_mode, int y_mode, int z_mode)
 
 	if (!x_mode && !y_mode && !z_mode)
 	{
-		tilt->x = DEFAULT_ROTATE;
-		tilt->y = DEFAULT_ROTATE;
-		tilt->z = DEFAULT_ROTATE;
+		tilt->x = DEFAULT_ROT_X;
+		tilt->y = DEFAULT_ROT_Y;
+		tilt->z = DEFAULT_ROT_Z;
 		return ;
 	}
 	tilt->x += CHANGE_ROTATE * x_mode;
@@ -564,10 +544,230 @@ void change_rotate(t_fdf *fdf, int x_mode, int y_mode, int z_mode)
 		tilt->z += MAX_ROTATE;
 }
 
-int	change_color_when_press_buttons(int code, void *vfdf)
+void	draw_button(t_mlx *mlx, t_drawing *d, char *name)
 {
-	t_fdf *fdf = (t_fdf *)vfdf;
+	int leng;
 
+	leng = ft_strlen(name);
+	draw_box(mlx, 10 + (10 * leng), 20,
+			(d->y - 5) * SCREEN_WIDTH + d->x - 5);
+	mlx_string_put(mlx->mlx, mlx->win, d->x, d->y - 7, YELLOW_COLOR, name);
+}
+
+void	draw_filled_box(t_mlx * mlx, t_drawing *d)
+{
+	int i;
+	int k;
+
+	k = -1;
+	while (++k < d->h)
+	{
+		i = -1;
+		while(++i < d->w)
+			mlx_pixel_put(mlx->mlx, mlx->win, d->x + i, d->y + k, d->color);
+	}
+}
+
+void	draw_bar(t_mlx *mlx, int w, int h, int where)
+{
+	int i;
+	int k;
+	int x;
+	int y;
+
+	draw_box(mlx, MAX_RANGE + 4, h + 4, where - 2 - SCREEN_WIDTH * 2);
+	x = where % SCREEN_WIDTH;
+	y = where / SCREEN_WIDTH;
+	k = -1;
+	while (++k < h)
+	{
+		i = -1;
+		while (++i < w)
+			mlx_pixel_put(mlx->mlx, mlx->win, i + x, k + y, YELLOW_COLOR);
+	}
+}
+
+void draw_arrows_wasd(t_mlx *m, t_drawing *d)
+{
+	d->y += 23;
+	draw_button(m, d, "<");
+	d->x += 23;
+	draw_button(m, d, "v");
+	d->y -= 23;
+	draw_button(m, d, "^");
+	d->x += 23;
+	d->y += 23;
+	draw_button(m, d,">");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 36,
+			WHITE_COLOR, "Move map");
+	d->x = 190;
+	d->y = 143;
+	draw_button(m, d, "A");
+	d->x += 23;
+	draw_button(m, d, "S");
+	d->y -= 23;
+	draw_button(m, d, "W");
+	d->x += 23;
+	d->y += 23;
+	draw_button(m, d,"D");
+	mlx_string_put(m->mlx, m->win, 145, d->y + 26,
+				   WHITE_COLOR, "Change x / y");
+	mlx_string_put(m->mlx, m->win, 145, d->y + 41,
+				   WHITE_COLOR, "axis rotation");
+}
+
+void	draw_qe_plus_minus(t_mlx *m, t_drawing *d)
+{
+	draw_button(m, d, "Q");
+	d->x += 53;
+	draw_button(m, d, "E");
+	mlx_string_put(m->mlx, m->win, d->x - 25, d->y - 7,
+				WHITE_COLOR, "/");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				WHITE_COLOR, "Change z");
+	mlx_string_put(m->mlx, m->win, 15, d->y + 41,
+				WHITE_COLOR, "axis rotation");
+	d->x = 190;
+	draw_button(m, d, "+");
+	d->x += 53;
+	draw_button(m, d, "-");
+	mlx_string_put(m->mlx, m->win, d->x - 25, d->y - 7,
+				WHITE_COLOR, "/");
+	mlx_string_put(m->mlx, m->win, 175, d->y + 26,
+				WHITE_COLOR, "Change zoom");
+	mlx_string_put(m->mlx, m->win, 195, d->y + 41,
+				WHITE_COLOR, "(range)");
+}
+
+void draw_scales(t_mlx *m, t_drawing *d)
+{
+	draw_button(m, d, "Num7");
+	d->x += 83;
+	draw_button(m, d, "Num9");
+	mlx_string_put(m->mlx, m->win, d->x - 25, d->y - 7,
+				   WHITE_COLOR, "/");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				   WHITE_COLOR, "Change x-axis scale");
+	d->y += 60;
+	d->x = 30;
+	draw_button(m, d, "Num4");
+	d->x += 83;
+	draw_button(m, d, "Num6");
+	mlx_string_put(m->mlx, m->win, d->x - 25, d->y - 7,
+				   WHITE_COLOR, "/");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				   WHITE_COLOR, "Change x-axis scale");
+	d->y += 60;
+	d->x = 30;
+	draw_button(m, d, "Num1");
+	d->x += 83;
+	draw_button(m, d, "Num3");
+	mlx_string_put(m->mlx, m->win, d->x - 25, d->y - 7,
+				   WHITE_COLOR, "/");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				   WHITE_COLOR, "Change z-axis scale");
+}
+
+void draw_resets(t_mlx *m, t_drawing *d)
+{
+	draw_button(m, d, "Backspace");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				WHITE_COLOR, "Reset zoom");
+	d->x = 190;
+	draw_button(m, d, "Tab");
+	mlx_string_put(m->mlx, m->win, 165, d->y + 26,
+				   WHITE_COLOR, "Reset rotation");
+	d->x = 30;
+	d->y += 70;
+	draw_button(m, d, "Enter");
+	mlx_string_put(m->mlx, m->win, 25, d->y + 26,
+				   WHITE_COLOR, "Reset position");
+	d->x = 190;
+	draw_button(m, d, "Num0");
+	mlx_string_put(m->mlx, m->win, 185, d->y + 26,
+				   WHITE_COLOR, "Reset scale");
+}
+
+void draw_control_hud_esc(t_mlx *m, t_drawing *d)
+{
+	draw_button(m, d, "H");
+	mlx_string_put(m->mlx, m->win, d->x + 25, d->y - 6,
+				   WHITE_COLOR, "Show / hide HUD");
+	d->x += 120;
+	draw_button(m, d, "Esc");
+	mlx_string_put(m->mlx, m->win, d->x + 25, d->y - 6,
+				   WHITE_COLOR, "Exit");
+}
+
+void draw_controls(t_mlx *mlx)
+{
+	t_drawing	d;
+
+	d.color = (int)0xA07070FF;
+	d.x = 10;
+	d.y = 100;
+	d.h = 600;
+	d.w = 300;
+	draw_filled_box(mlx, &d);
+
+	d.x = 30;
+	d.y = 120;
+	d.color = WHITE_COLOR;
+	draw_arrows_wasd(mlx, &d);
+	d.x = 30;
+	d.y = 230;
+	draw_qe_plus_minus(mlx, &d);
+	d.y = 320;
+	d.x = 30;
+	draw_scales(mlx, &d);
+	d.y = 510;
+	d.x = 30;
+	draw_resets(mlx, &d);
+	d.y = 660;
+	d.x = 30;
+	draw_control_hud_esc(mlx, &d);
+}
+
+void	draw_parameters(t_fdf *fdf)
+{
+	char huh[12];
+	void *mlx;
+	void *win;
+
+	mlx = fdf->mlx.mlx;
+	win = fdf->mlx.win;
+
+	mlx_string_put(mlx, win, 0, 0, WHITE_COLOR, "position:");
+	mlx_string_put(mlx, win, 100, 0, WHITE_COLOR,
+				ft_itostr(fdf->mutation.shift.x, huh));
+	mlx_string_put(mlx, win, 140, 0, WHITE_COLOR,
+				ft_itostr(fdf->mutation.shift.y, huh));
+	mlx_string_put(mlx, win, 0, 15, WHITE_COLOR, "rotation:");
+	mlx_string_put(mlx, win, 100, 15, WHITE_COLOR,
+				ft_itostr(fdf->mutation.tilt.x, huh));
+	mlx_string_put(mlx, win, 140, 15, WHITE_COLOR,
+				ft_itostr(fdf->mutation.tilt.y, huh));
+	mlx_string_put(mlx, win, 180, 15, WHITE_COLOR,
+				ft_itostr(fdf->mutation.tilt.z, huh));
+	mlx_string_put(mlx, win, 0, 30, WHITE_COLOR, "stretch:");
+	mlx_string_put(mlx, win, 100, 30, WHITE_COLOR,
+				ft_itostr(fdf->mutation.stretch.x, huh));
+	mlx_string_put(mlx, win, 140, 30, WHITE_COLOR,
+				ft_itostr(fdf->mutation.stretch.y, huh));
+	mlx_string_put(mlx, win, 180, 30, WHITE_COLOR,
+				ft_itostr(fdf->mutation.stretch.z, huh));
+	mlx_string_put(mlx, win, 180, 0, WHITE_COLOR, "range:");
+	draw_bar(&fdf->mlx, fdf->mutation.stretch.range, 10, 7 * 1600 + 275);
+	mlx_string_put(mlx, win, 240, 0, WHITE_COLOR,
+				ft_itostr(fdf->mutation.stretch.range, huh));
+	draw_controls(&fdf->mlx);
+}
+
+int	so_many_buttons(int code, void *vfdf)
+{
+	t_fdf *fdf;
+
+	fdf = (t_fdf *)vfdf;
 	if (code == UP)
 		fdf->mutation.shift.y -= CHANGE_MOVE;
 	else if (code == DOWN)
@@ -611,65 +811,20 @@ int	change_color_when_press_buttons(int code, void *vfdf)
 	else if (code == ROTATE_RESET)
 		change_rotate(fdf, 0, 0, 0);
 
-
-
-
-	/*else if (code == 83)
-		rem_r((t_params *)p);
-	else if (code == 84)
-		rem_g((t_params *)p);
-	else if (code == 85)
-		rem_b((t_params *)p);
-	else if (code == 86)
-		add_r((t_params *)p);
-	else if (code == 87)
-		add_g((t_params *)p);
-	else if (code == 88)
-		add_b((t_params *)p);*/
-	else if (code == 53)
+	else if (code == ESC)
 		close_pls(NULL);
-	/*else if (code == 13)
-		rotate(p, X_AXIS, ROT_R);*/
+
 
 	mlx_clear_window(fdf->mlx.mlx, fdf->mlx.win);
-	char huh[12];
-	draw_four_pixels(fdf);
+	draw_map(fdf);
 
-	ft_itostr(fdf->mutation.tilt.x, huh);
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 0, WHITE_COLOR, "position:");
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 100, 0, WHITE_COLOR, ft_itostr(fdf->mutation.shift.x, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 140, 0, WHITE_COLOR, ft_itostr(fdf->mutation.shift.y, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 180, 0, WHITE_COLOR, ft_itostr(fdf->mutation.shift.z, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 15, WHITE_COLOR, "rotation:");
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 100, 15, WHITE_COLOR, ft_itostr(fdf->mutation.tilt.x, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 140, 15, WHITE_COLOR, ft_itostr(fdf->mutation.tilt.y, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 180, 15, WHITE_COLOR, ft_itostr(fdf->mutation.tilt.z, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 30, WHITE_COLOR, "stretch:");
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 100, 30, WHITE_COLOR, ft_itostr(fdf->mutation.stretch.x, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 140, 30, WHITE_COLOR, ft_itostr(fdf->mutation.stretch.y, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 180, 30, WHITE_COLOR, ft_itostr(fdf->mutation.stretch.z, huh));
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 45, WHITE_COLOR, "last recognized button code:");
-	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 300, 45, WHITE_COLOR, ft_itostr(code, huh));
+	draw_parameters(fdf);
 
-	//mlx_string_put(((t_params *)p)->mlx, ((t_params *)p)->win, 1300, 1150, 0xFFFFFF, ft_itoa(((t_params *)p)->x));
-	//mlx_string_put(((t_params *)p)->mlx, ((t_params *)p)->win, 1350, 1150, 0xFFFFFF, ft_itoa(((t_params *)p)->y));
-	//mlx_string_put(((t_params *)p)->mlx, ((t_params *)p)->win, 1450, 1150, 0xFFFFFF, ft_itoa(((t_params *)p)->size));
-
-	//mlx_pixel_put(((t_params *)p)->mlx, ((t_params *)p)->win, ((t_params *)p)->x, ((t_params *)p)->y, ((t_params *)p)->color);
-	//draw_box(p);
-	//draw_four(p);
-	//draw_two(p);
-	//draw_square(p);
-	//draw_rgb(p, 1150);
 	return (0);
 }
 
 int early_mlx_init(t_fdf *fdf)
 {
-	//t_pixel *p;
-
-
-	//p = ((t_pixel *)&fdf->map.bit_map.items[0]);
 	fdf->mlx.mlx = mlx_init();
 	fdf->mlx.win = mlx_new_window(fdf->mlx.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
 	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 0, 0x00FFFF00, "Mlx initializing complete!");
@@ -679,17 +834,14 @@ int early_mlx_init(t_fdf *fdf)
 	fdf->mutation.stretch.y = DEFAULT_STRETH;
 	fdf->mutation.stretch.z = DEFAULT_STRETH / 2;
 	fdf->mutation.stretch.range = DEFAULT_RANGE;
+	fdf->mutation.tilt.x = DEFAULT_ROT_X;
+	fdf->mutation.tilt.y = DEFAULT_ROT_Y;
 	fdf->map.size = fdf->map.height * fdf->map.width;
 
-	draw_four_pixels(fdf);
+	draw_map(fdf);
+	draw_controls(&fdf->mlx);
 
-	/*
-	p.x = 300;
-	p.y = 300;
-	p.size = 100;
-	p.color = 0xFFFFFF;
-	mlx_string_put(p.mlx, p.win, 300, 300, 0x00FFFF00, "Hey!");*/
-	mlx_hook(fdf->mlx.win, 2, 1UL << 0UL, change_color_when_press_buttons, fdf);
+	mlx_hook(fdf->mlx.win, 2, 1UL << 0UL, so_many_buttons, fdf);
 	mlx_hook(fdf->mlx.win, 17, 0, close_pls, NULL);
 	mlx_loop(fdf->mlx.mlx);
 	return (0);
