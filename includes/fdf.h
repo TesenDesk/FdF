@@ -93,6 +93,8 @@ typedef enum			e_buttons
 	RIGHT,
 	DOWN,
 	UP,
+	HUD = 4,
+	SCALE_RESET = 82,
 	ESC = 53
 }						t_buttons;
 
@@ -219,7 +221,7 @@ typedef struct			s_fdf
 	t_map				map;
 	t_mutation			mutation;
 	t_mlx				mlx;
-	char				graphical_state;
+	char				draw_hud;
 }						t_fdf;
 
 /*
