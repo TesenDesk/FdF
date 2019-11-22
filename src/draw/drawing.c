@@ -781,7 +781,7 @@ int	so_many_buttons(int code, void *vfdf)
 	else if (code == MINUS)
 		change_range(fdf, -1);
 
-	else if (code == ZOOM_RESET)
+	else if (code == SCALE_RESET)
 		change_stretch(fdf, 0, 0, 0);
 	else if (code == ZOOM_X_PLUS)
 		change_stretch(fdf, 1, 0, 0);
@@ -817,9 +817,8 @@ int	so_many_buttons(int code, void *vfdf)
 
 	mlx_clear_window(fdf->mlx.mlx, fdf->mlx.win);
 	draw_map(fdf);
-
-	draw_parameters(fdf);
-
+	if (fdf->draw_hud)
+		draw_parameters(fdf);
 	return (0);
 }
 
@@ -837,6 +836,7 @@ int early_mlx_init(t_fdf *fdf)
 	fdf->mutation.tilt.x = DEFAULT_ROT_X;
 	fdf->mutation.tilt.y = DEFAULT_ROT_Y;
 	fdf->map.size = fdf->map.height * fdf->map.width;
+	fdf->draw_hud = 1;
 
 	draw_map(fdf);
 	draw_controls(&fdf->mlx);

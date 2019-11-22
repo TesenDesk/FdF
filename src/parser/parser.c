@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/22 23:57:25 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 00:23:12 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,13 @@ int					has_color_characteristic(char c)
 
 void				set_default_color(t_pixel *pixel)
 {
-	if (pixel->z <= 10000)
+	if (pixel->z <= -10000)
 		pixel->color = HADOPELAGIC_COLOR;
-	else if (pixel->z <= 6000)
+	else if (pixel->z <= -6000)
 		pixel->color = ABYSSALOPELAGIC_1_COLOR;	
-	else if (pixel->z <= 4000)
+	else if (pixel->z <= -4000)
 		pixel->color = ABYSSALOPELAGIC_2_COLOR;
-	else if (pixel->z <= 2000)
+	else if (pixel->z <= -2000)
 		pixel->color = BATHYPELAGIC_COLOR;
 	else if (pixel->z <= 0)
 		pixel->color = MESOPELAGIC_COLOR;
