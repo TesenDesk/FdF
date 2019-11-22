@@ -693,9 +693,9 @@ void draw_control_hud_esc(t_mlx *m, t_drawing *d)
 	draw_button(m, d, "H");
 	mlx_string_put(m->mlx, m->win, d->x + 25, d->y - 6,
 				   WHITE_COLOR, "Show / hide HUD");
-	d->x += 120;
+	d->x += 185;
 	draw_button(m, d, "Esc");
-	mlx_string_put(m->mlx, m->win, d->x + 25, d->y - 6,
+	mlx_string_put(m->mlx, m->win, d->x + 45, d->y - 6,
 				   WHITE_COLOR, "Exit");
 }
 
@@ -763,6 +763,20 @@ void	draw_parameters(t_fdf *fdf)
 	draw_controls(&fdf->mlx);
 }
 
+void	change_hud(t_fdf *fdf)
+{
+	if (fdf->draw_hud)
+		fdf->draw_hud = 0;
+	else
+		fdf->draw_hud = 1;
+}
+
+void	reset_pos(t_fdf *fdf)
+{
+	fdf->mutation.shift.x = DEFAULT_POS_X;
+	fdf->mutation.shift.y = DEFAULT_POS_Y;
+}
+
 int	so_many_buttons(int code, void *vfdf)
 {
 	t_fdf *fdf;
@@ -810,6 +824,12 @@ int	so_many_buttons(int code, void *vfdf)
 		change_rotate(fdf, 1, 0, 0);
 	else if (code == ROTATE_RESET)
 		change_rotate(fdf, 0, 0, 0);
+	else if (code == ZOOM_RESET)
+		fdf->mutation.stretch.range = DEFAULT_RANGE;
+	else if (code == HUD)
+		change_hud(fdf);
+	else if (code == POSITION_RESET)
+		reset_pos(fdf);
 
 	else if (code == ESC)
 		close_pls(NULL);
@@ -827,14 +847,10 @@ int early_mlx_init(t_fdf *fdf)
 	fdf->mlx.mlx = mlx_init();
 	fdf->mlx.win = mlx_new_window(fdf->mlx.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
 	mlx_string_put(fdf->mlx.mlx, fdf->mlx.win, 0, 0, 0x00FFFF00, "Mlx initializing complete!");
-	fdf->mutation.shift.x = DEFAULT_POS_X;
-	fdf->mutation.shift.y = DEFAULT_POS_Y;
-	fdf->mutation.stretch.x = DEFAULT_STRETH;
-	fdf->mutation.stretch.y = DEFAULT_STRETH;
-	fdf->mutation.stretch.z = DEFAULT_STRETH / 2;
+	reset_pos(fdf);
+	change_stretch(fdf, 0, 0, 0);
 	fdf->mutation.stretch.range = DEFAULT_RANGE;
-	fdf->mutation.tilt.x = DEFAULT_ROT_X;
-	fdf->mutation.tilt.y = DEFAULT_ROT_Y;
+	change_rotate(fdf, 0,0,0);
 	fdf->map.size = fdf->map.height * fdf->map.width;
 	fdf->draw_hud = 1;
 
