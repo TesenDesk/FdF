@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/22 22:59:32 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/22 23:07:59 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,9 @@ void				set_default_color(t_pixel *pixel)
 		pixel->color = BLUE_COLOR;
 	else if (pixel->z <= 200)
 		pixel->color = GREEN_COLOR;
-	else if (pixel->z <= 5000)
+	else if (pixel->z <= 1000)
+		pixel->color = YELLOW_COLOR;
+	else if (pixel->z <= 3000)
 		pixel->color = BROWN_COLOR;
 	else
 		pixel->color = WHITE_COLOR;
