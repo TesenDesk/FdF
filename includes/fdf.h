@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/15 22:54:18 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/22 23:57:22 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,27 @@
 # define BROWN_COLOR	0x00CD853F
 # define BLUE_COLOR		0x000000FF
 # define GREEN_COLOR	0x0000FF00
-# define RED_COLOR		0x00FF0000
 # define YELLOW_COLOR	0x00FFFF00
 # define SCREEN_WIDTH	1600
 # define SCREEN_HEIGHT	1200
 # define MULTIPLIER		100000
 # define SCREEN_TITLE	"/Users/Admin/Applications/.secret/42prj/fdf/fdf.out"
+
+typedef enum			e_elevations
+{
+	HADOPELAGIC_COLOR = 0x000237,
+	ABYSSALOPELAGIC_1_COLOR = 0x000876,
+	ABYSSALOPELAGIC_2_COLOR = 0x0019d2,
+	BATHYPELAGIC_COLOR = 0x2c6cf6,
+	MESOPELAGIC_COLOR = 0x60ccfa0,
+	PLAIN = 0x78fbfd0,
+	HIGHLAND = 0x326e3a0,
+	PLATEAUS = 0xa8d78c,
+	LOW_MOUNTAIN = 0xccac370,
+	MEDIUM_MOUNTAIN = 0x9c7c0b0,
+	HIGH_MOUNTAIN = 0x4608730,
+	HIGHEST_MOUNTAIN = 0xd4ced9
+}						t_elevations;
 
 # define CHANGE_MOVE	10
 # define CHANGE_ROTATE	10
