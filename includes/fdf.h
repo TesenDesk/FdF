@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 00:37:44 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 00:45:12 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ typedef enum			e_elevations
 	ABYSSALOPELAGIC_1_COLOR = 0x00000876,
 	ABYSSALOPELAGIC_2_COLOR = 0x000019d2,
 	BATHYPELAGIC_COLOR = 0x002c6cf6,
-	MESOPELAGIC_COLOR = 0x0060ccfa0,
-	PLAIN = 0x0020f5ee,
-	HIGHLAND = 0x002ea64a,
+	MESOPELAGIC_COLOR = 0x000dc2d6,
+	PLAIN = 0x002ba318,
+	HIGHLAND = 0x00128019,
 	PLATEAUS = 0x00d1cb13,
 	LOW_MOUNTAIN = 0x00cdbad14,
 	MEDIUM_MOUNTAIN = 0x00826811,
