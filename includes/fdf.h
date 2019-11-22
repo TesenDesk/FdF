@@ -17,26 +17,34 @@
 **---------------------------------INCLUDES-------------------------------------
 */
 
-#include <math.h>
-#include "libft.h"
-#include "mlx.h"
+# include <math.h>
+# include "libft.h"
+# include "mlx.h"
 
 /*
 **---------------------------------MACROSES-------------------------------------
 */
 
+# define DEBUG_MODE		1
 # define PI				3.14159265359
 # define MAX_ROTATE		360
 # define MIN_ROTATE		0
-# define MAX_RANGE		100
+# define MAX_RANGE		200
 # define MIN_RANGE		1
 # define DEFAULT_STRETH	100
-# define DEFAULT_ROTATE	0
+# define DEFAULT_ROT_X	60
+# define DEFAULT_ROT_Y	40
+# define DEFAULT_ROT_Z	0
 # define DEFAULT_RANGE	50
 # define DEFAULT_POS_X	800
 # define DEFAULT_POS_Y	600
 # define DEFAULT_COLOR	0x0032A852
 # define WHITE_COLOR	0x00FFFFFF
+# define BROWN_COLOR	0x00CD853F
+# define BLUE_COLOR		0x000000FF
+# define GREEN_COLOR	0x0000FF00
+# define RED_COLOR		0x00FF0000
+# define YELLOW_COLOR	0x00FFFF00
 # define SCREEN_WIDTH	1600
 # define SCREEN_HEIGHT	1200
 # define MULTIPLIER		100000
@@ -49,32 +57,41 @@
 
 typedef enum			e_buttons
 {
-	ZOOM_X_PLUS =		30,
-	ZOOM_X_MINUS =		33,
-	ZOOM_Y_PLUS =		47,
-	ZOOM_Y_MINUS =		43,
-	ZOOM_Z_PLUS =		39,
-	ZOOM_Z_MINUS =		41,
-	ROTATE_X_MINUS =	1,
-	ROTATE_X_PLUS =		13,
-	ROTATE_Y_MINUS =	0,
-	ROTATE_Y_PLUS =		2,
-	ROTATE_Z_PLUS =		14,
-	ROTATE_Z_MINUS =	12,
-	ROTATE_RESET =		10,
-	PLUS =				24,
-	MINUS =				27,
-	ZOOM_RESET =		51,
-	LEFT =				123,
-	RIGHT				,
-	DOWN				,
-	UP
+	ZOOM_X_PLUS = 30,
+	ZOOM_X_MINUS = 33,
+	ZOOM_Y_PLUS = 47,
+	ZOOM_Y_MINUS = 43,
+	ZOOM_Z_PLUS = 39,
+	ZOOM_Z_MINUS = 41,
+	ROTATE_X_MINUS = 1,
+	ROTATE_X_PLUS = 13,
+	ROTATE_Y_MINUS = 0,
+	ROTATE_Y_PLUS = 2,
+	ROTATE_Z_PLUS = 14,
+	ROTATE_Z_MINUS = 12,
+	ROTATE_RESET = 10,
+	PLUS = 24,
+	MINUS = 27,
+	ZOOM_RESET = 51,
+	LEFT = 123,
+	RIGHT,
+	DOWN,
+	UP,
+	ESC = 53
 }						t_buttons;
-
 
 /*
 **---------------------------------READER---------------------------------------
 */
+
+typedef struct			s_drawing
+{
+	int					x;
+	int					y;
+	int					color;
+	int					w;
+	int					h;
+}						t_drawing;
 
 typedef struct			s_cordcase
 {
@@ -99,7 +116,7 @@ typedef struct			s_pixel
 {
 	int					z : sizeof(int) * BITS_AT_BYTE;
 	int					color : sizeof(int) * BITS_AT_BYTE;
-}                       t_pixel;
+}						t_pixel;
 
 typedef union			u_remake
 {
@@ -165,16 +182,17 @@ typedef struct			s_mutation
 typedef struct			s_mlx
 {
 	void				*mlx;
-	void 				*win;
+	void				*win;
 }						t_mlx;
 
-typedef struct          s_fdf
+typedef struct			s_fdf
 {
 	t_read				reader;
 	t_map				map;
 	t_mutation			mutation;
 	t_mlx				mlx;
-}                       t_fdf;
+	char				graphical_state;
+}						t_fdf;
 
 /*
 **---------------------------FUNCTION_DECLARATIONS------------------------------
