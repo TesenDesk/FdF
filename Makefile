@@ -6,7 +6,7 @@
 #    By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 18:21:00 by ftothmur          #+#    #+#              #
-#    Updated: 2019/11/14 18:31:14 by ftothmur         ###   ########.fr        #
+#    Updated: 2019/11/23 00:09:46 by ftothmur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,13 @@ NAME_HDR_DIR	:=	./includes/
 NAME_OBJ_DIR	:=	$(NAME_DIR)src/
 NAME_SRC_DIR	:=	$(NAME_DIR)src/
 PARSER_DIR		:=	$(NAME_SRC_DIR)parser/
-MLX_I_DIR	:=	$(NAME_DIR)
+DRAW_DIR		:=	$(NAME_SRC_DIR)draw/
 #------------------------------------files-------------------------------------#
 NAME			:=	fdf
 MAIN_SRC		:=	$(addprefix $(NAME_SRC_DIR),main.c)
-MLX_I_SRC		:=	$(addprefix $(MLX_I_DIR), main.c)
 PARSER_SRC		:=	$(addprefix $(PARSER_DIR), parser.c)
-SRC				:=	$(MAIN_SRC) $(PARSER_SRC) $(MLX_I_SRC)
+DRAW_SRC		:=	$(addprefix $(DRAW_DIR),drawing.c)
+SRC				:=	$(MAIN_SRC) $(PARSER_SRC) $(DRAW_SRC)
 OBJ				:=	$(patsubst %.c,%.o, $(SRC))
 #----------------------------------includes------------------------------------#
 LIB_HDR			:=	$(LIB_HDR_DIR)libft.h
@@ -54,7 +54,8 @@ else
 	CFLAGS		:=	-Wall -Wextra -Werror
 	DEBUGMSG	:= $(PREFIX)⚠️  \033[1;33mDebug mode $(RED)disabled.$(RST)\n
 endif
-LIB_FLAGS		:=	-L$(LIB_DIR) -lft
+MLX_FLAGS		:= -L./minilibx -lmlx  -framework OpenGL -framework AppKit
+LIB_FLAGS		:=	-L$(LIB_DIR) -lft $(MLX_FLAGS)
 HDR_FLAGS		:=	-I$(NAME_HDR_DIR) -I$(LIB_HDR_DIR)
 
 #===================================RULES======================================#
@@ -66,7 +67,8 @@ $(NAME):			$(SRC) $(OBJ) $(HEADERS) $(LIB)
 				@printf "%-145c\r$(PREFIX)✅  $(GREEN)All \
 obj-files accepted.$(RST)\n" ' '
 				@printf "$(PREFIX)📦  Building $(NAME)...\n"
-				@gcc -o $(NAME) $(OBJ) $(HDR_FLAGS) $(LIB_FLAGS) $(CFLAGS)
+#				@gcc -o $(NAME) $(OBJ) $(HDR_FLAGS) $(LIB_FLAGS) $(CFLAGS)
+				cc -o $(NAME) $(SRC) $(HDR_FLAGS) $(LIB_FLAGS) -g
 
 $(LIB):				lib
 
