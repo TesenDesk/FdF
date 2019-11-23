@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 05:23:33 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 05:25:13 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 09:33:07 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,12 @@ int					read_a_line_and_put_it_into_an_array(t_read *reader)
 			!ft_vector_add(&reader->lines, (void *)line))
 		return (SUCCESS);
 	return (FAILURE);
+}
+
+void				free_the_project(t_fdf *fdf)
+{
+	ft_vector_free_data(&fdf->reader.lines, ft_memdel);
+	ft_vector_free(&fdf->reader.lines);
+	ft_vector_free(&fdf->map.bit_map);
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 05:28:51 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 08:56:02 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 09:40:26 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int					read_and_parse_the_file(t_fdf *fdf)
 	if (read_a_line_and_put_it_into_an_array(&fdf->reader) ||
 			parse_first_line_and_recognizing_the_max_abscissa(fdf) ||
 			parse_remaining_lines_and_recognizing_the_max_ordinate(fdf))
-		return (FAILURE);
+		return (error("ERROR"));
 	count_applicate(fdf);
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 06:06:12 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 09:32:26 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef enum			e_elevations
 # define CHANGE_MOVE	10
 # define CHANGE_ROTATE	10
 # define CHANGE_STRETCH	1
-# define CHANGE_RANGE	2
+# define CHANGE_RANGE	1
 
 typedef enum			e_buttons
 {
@@ -219,6 +219,7 @@ typedef struct			s_fdf
 
 int						validate_read_and_parse(int argc, char **argv,
 							t_fdf *fdf);
+void					free_the_project(t_fdf *fdf);
 int						parse_applicate(char **top, t_pixel *pixel);
 void					record_applicate_extremes(t_fdf *fdf);
 void					move_top_to_the_beginning_of_the_read_line(char *line,
