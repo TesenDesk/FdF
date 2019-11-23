@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   read_line_and_error_management.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 21:53:00 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 05:24:58 by ftothmur         ###   ########.fr       */
+/*   Created: 2019/11/23 05:23:33 by ftothmur          #+#    #+#             */
+/*   Updated: 2019/11/23 05:25:13 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int					main(int argc, char **argv)
+int					usage(void)
 {
-	t_fdf			fdf;
+	ft_putendl("USAGE");
+	return (FAILURE);
+}
 
-	if (validate_read_and_parse(argc, argv, &fdf) == FAILURE)
-		return (FAILURE);
-	early_mlx_init(&fdf);
-	return (SUCCESS);
+int					error(char *error_msg)
+{
+	ft_putendl(error_msg);
+	return (FAILURE);
+}
+
+int					read_a_line_and_put_it_into_an_array(t_read *reader)
+{
+	char			*line;
+
+	if ((reader->read_state = ft_get_next_line(reader->fd, &line)) > 0 &&
+			!ft_vector_add(&reader->lines, (void *)line))
+		return (SUCCESS);
+	return (FAILURE);
 }

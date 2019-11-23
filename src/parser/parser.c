@@ -6,64 +6,11 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 04:36:53 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 05:25:51 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int					usage(void)
-{
-	ft_putendl("USAGE");
-	return (FAILURE);
-}
-
-int					error(char *error_msg)
-{
-	ft_putendl(error_msg);
-	return (FAILURE);
-}
-
-int					use_terminal_arguments_to_open_a_file(int argc, char **argv,
-						t_read *reader)
-{
-	if (argc != 2)
-		return (usage());
-	if ((reader->fd = open(*(argv + 1), O_RDONLY)) < 0)
-		return (error("EBADFD"));
-	return (SUCCESS);
-}
-
-int					prepare_storage_for_reading_lines(t_read *reader)
-{
-	if (ft_vector_init(&reader->lines))
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-int					prepare_storage_for_recognized_map_information(
-						t_map *map)
-{
-	if (ft_vector_init(&map->bit_map))
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-void				clear_work_structure(t_fdf *fdf)
-{
-	ft_bzero(fdf, sizeof(*fdf));
-	return ;
-}
-
-int					read_a_line_and_put_it_into_an_array(t_read *reader)
-{
-	char			*line;
-
-	if ((reader->read_state = ft_get_next_line(reader->fd, &line)) > 0 &&
-			!ft_vector_add(&reader->lines, (void *)line))
-		return (SUCCESS);
-	return (FAILURE);
-}
 
 void				move_top_to_the_beginning_of_the_read_line(char *line,
 						char **top)
@@ -72,16 +19,16 @@ void				move_top_to_the_beginning_of_the_read_line(char *line,
 	return ;
 }
 
-void				move_top_out_of_substring_number(char **top)
-{
-	char			*str;
+// void				move_top_out_of_substring_number(char **top)
+// {
+// 	char			*str;
 
-	str = *top;
-	while (ft_isdigit(*str) || *str == '+' || *str == '-')
-		++str;
-	*top = str;
-	return ;
-}
+// 	str = *top;
+// 	while (ft_isdigit(*str) || *str == '+' || *str == '-')
+// 		++str;
+// 	*top = str;
+// 	return ;
+// }
 
 int					has_color_characteristic(char c)
 {
@@ -179,7 +126,7 @@ int					parse_applicate(char **top, t_pixel *pixel)
 	char			*tip;
 	intmax_t		z;
 
-	if (ft_str_to_intmax(*top, &tip, 10, &z))
+	if (ft_str_to_intmax(*top, &tip, 10, &z) || *top == tip)
 		return (FAILURE);
 	*top = tip;
 	pixel->z = (int)z;
@@ -275,9 +222,10 @@ void				count_applicate(t_fdf *fdf)
 
 int					read_and_parse_the_file(t_fdf *fdf)
 {
-	read_a_line_and_put_it_into_an_array(&fdf->reader);
-	parse_first_line_and_recognizing_the_max_abscissa(fdf);
-	parse_remaining_lines_and_recognizing_the_max_ordinate(fdf);
+	if (read_a_line_and_put_it_into_an_array(&fdf->reader) ||
+			parse_first_line_and_recognizing_the_max_abscissa(fdf) ||
+			parse_remaining_lines_and_recognizing_the_max_ordinate(fdf))
+		return (FAILURE);
 	count_applicate(fdf);
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 03:07:39 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 05:24:53 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,8 @@ typedef struct			s_fdf
 
 int						validate_read_and_parse(int argc, char **argv,
 							t_fdf *fdf);
+
+int						early_mlx_init(t_fdf *fdf);
 int						need_to_draw_this(t_wire *w);
 void					draw_connection_if_necessary(t_fdf *fdf, t_wire *w);
 void					draw_box(t_mlx *mlx, int w, int h, int where);
