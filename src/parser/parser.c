@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 03:29:09 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 03:49:41 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int					convert_string_to_color_number(char **top, t_pixel *pixel)
 	if (ft_str_to_uintmax(str, &end, 16, &color))
 		return (FAILURE);
 	pixel->color = (int)color;
-	*top = str;
+	*top = end;
 	return (SUCCESS);
 }
 
