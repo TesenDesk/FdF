@@ -25,7 +25,6 @@
 **---------------------------------MACROSES-------------------------------------
 */
 
-# define DEBUG_MODE		1
 # define PI				3.14159265359
 # define MAX_ROTATE		360
 # define MIN_ROTATE		0
@@ -38,11 +37,7 @@
 # define DEFAULT_RANGE	50
 # define DEFAULT_POS_X	800
 # define DEFAULT_POS_Y	600
-# define DEFAULT_COLOR	0x0032A852
 # define WHITE_COLOR	0x00FFFFFF
-# define BROWN_COLOR	0x00CD853F
-# define BLUE_COLOR		0x000000FF
-# define GREEN_COLOR	0x0000FF00
 # define YELLOW_COLOR	0x00FFFF00
 # define SCREEN_WIDTH	1600
 # define SCREEN_HEIGHT	1200
@@ -191,19 +186,11 @@ typedef struct			s_tilt
 	int					z;
 }						t_tilt;
 
-typedef struct			s_position
-{
-	int					x;
-	int					y;
-	int					z;
-}						t_position;
-
 typedef struct			s_mutation
 {
 	t_stretch			stretch;
 	t_shift				shift;
 	t_tilt				tilt;
-	t_position			position;
 }						t_mutation;
 
 /*
@@ -231,5 +218,29 @@ typedef struct			s_fdf
 
 int						validate_read_and_parse(int argc, char **argv,
 							t_fdf *fdf);
+int						need_to_draw_this(t_wire *w);
+void					draw_connection_if_necessary(t_fdf *fdf, t_wire *w);
+void					draw_box(t_mlx *mlx, int w, int h, int where);
+void					draw_connections_to_neighbours(t_fdf *fdf, t_wire *w,
+								int pos);
+void					perform_rotation(t_fdf *fdf, int i, t_cordcase *ret);
+int						so_many_buttons(int code, void *vfdf);
+void					change_range(t_fdf *fdf, int mode);
+void					change_stretch(t_fdf *fdf, int x_mode, int y_mode,
+								int z_mode);
+void					change_rotate(t_fdf *fdf, int x_mode, int y_mode,
+								int z_mode);
+void					change_hud(t_fdf *fdf);
+void					reset_pos(t_fdf *fdf);
+void					draw_filled_box(t_mlx *mlx, t_drawing *d);
+void					draw_bar(t_mlx *mlx, int w, int h, int where);
+void					draw_arrows_wasd(t_mlx *m, t_drawing *d);
+void					draw_qe_plus_minus(t_mlx *m, t_drawing *d);
+void					draw_scales(t_mlx *m, t_drawing *d);
+void					draw_button(t_mlx *mlx, t_drawing *d, char *name);
+int						close_pls(void *param);
+void					draw_controls(t_mlx *mlx);
+void					draw_parameters(t_fdf *fdf);
+void					draw_map(t_fdf *fdf);
 
 #endif
