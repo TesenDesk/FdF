@@ -6,14 +6,14 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 05:23:33 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 09:33:07 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 09:52:08 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 int					usage(void)
 {
-	ft_putendl("USAGE");
+	ft_putendl("usage: ./fdf [file]");
 	return (FAILURE);
 }
 
