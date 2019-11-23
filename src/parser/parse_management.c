@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 05:28:51 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 07:42:41 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 08:56:02 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int					parse_the_line(t_fdf *fdf)
 			set_default_color(&converter.pixel);
 		enter_application_and_color_data(fdf, converter.pixel_as_ptr);
 	}
+	if (x_counter > 0)
+		return (FAILURE);
 	set_the_largest_ordinate(fdf);
 	return (SUCCESS);
 }
@@ -88,7 +90,7 @@ int					parse_remaining_lines_and_recognizing_the_max_ordinate(
 				parse_the_line(fdf))
 		{
 			if (!fdf->reader.read_state)
-				continue ;
+				break ;
 			return (FAILURE);
 		}
 	}
