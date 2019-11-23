@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 03:49:41 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 04:36:53 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int					prepare_storage_for_recognized_map_information(
 		return (FAILURE);
 	return (SUCCESS);
 }
+
 void				clear_work_structure(t_fdf *fdf)
 {
 	ft_bzero(fdf, sizeof(*fdf));
@@ -63,24 +64,13 @@ int					read_a_line_and_put_it_into_an_array(t_read *reader)
 		return (SUCCESS);
 	return (FAILURE);
 }
+
 void				move_top_to_the_beginning_of_the_read_line(char *line,
 						char **top)
 {
 	*top = line;
 	return ;
 }
-
-// void				move_top_to_expected_number_substr(char **top)
-// {
-// 	*top = (char *)ft_spskip((const char *)*top);
-// 	return ;
-// }
-
-// void				convert_substr_to_applicate(char *top, t_pixel *pixel)
-// {
-// 	pixel->z = ft_atoi(top);
-// 	return ;
-// }
 
 void				move_top_out_of_substring_number(char **top)
 {
@@ -103,7 +93,7 @@ void				set_default_color(t_pixel *pixel)
 	if (pixel->z <= -800)
 		pixel->color = HADOPELAGIC_COLOR;
 	else if (pixel->z <= -600)
-		pixel->color = ABYSSALOPELAGIC_1_COLOR;	
+		pixel->color = ABYSSALOPELAGIC_1_COLOR;
 	else if (pixel->z <= -400)
 		pixel->color = ABYSSALOPELAGIC_2_COLOR;
 	else if (pixel->z <= -200)
@@ -143,18 +133,6 @@ int					convert_string_to_color_number(char **top, t_pixel *pixel)
 	return (SUCCESS);
 }
 
-// void				move_top_out_of_color_substring(char **top)
-// {
-// 	char			*str;
-
-// 	str = *top;
-// 	while (*str && !ft_isspace(*str))
-// 		++str;
-// 	*top = str;
-// 	//TODO: не отслеживает неожиданный конец строки.
-// 	return ;
-// }
-
 int					enter_application_and_color_data(t_fdf *fdf,
 						void *pixel_as_ptr)
 {
@@ -190,7 +168,7 @@ void				record_applicate_extremes(t_fdf *fdf)
 	return ;
 }
 
-void 				set_the_largest_abscissa(t_fdf *fdf)
+void				set_the_largest_abscissa(t_fdf *fdf)
 {
 	fdf->map.width = fdf->map.bit_map.total;
 	return ;
@@ -200,7 +178,7 @@ int					parse_applicate(char **top, t_pixel *pixel)
 {
 	char			*tip;
 	intmax_t		z;
-	
+
 	if (ft_str_to_intmax(*top, &tip, 10, &z))
 		return (FAILURE);
 	*top = tip;
@@ -220,12 +198,10 @@ int					parse_first_line_and_recognizing_the_max_abscissa(
 	{
 		if (parse_applicate(&top, &converter.pixel))
 			return (FAILURE);
-		// move_top_out_of_substring_number(&top);
 		if (has_color_characteristic(*top))
 		{
 			if (convert_string_to_color_number(&top, &converter.pixel))
 				return (FAILURE);
-			// move_top_out_of_color_substring(&top);
 		}
 		else
 			set_default_color(&converter.pixel);
@@ -248,8 +224,6 @@ void				set_the_abscissa_counter(int *x_counter, t_fdf *fdf)
 	return ;
 }
 
-
-
 int					parse_the_line(t_fdf *fdf)
 {
 	char			*top;
@@ -265,9 +239,6 @@ int					parse_the_line(t_fdf *fdf)
 	{
 		if (parse_applicate(&top, &converter.pixel))
 			return (FAILURE);
-		// move_top_to_expected_number_substr(&top);
-		// convert_substr_to_applicate(top, &converter.pixel);
-		// move_top_out_of_substring_number(&top);
 		if (has_color_characteristic(*top))
 		{
 			if (convert_string_to_color_number(&top, &converter.pixel))
@@ -278,7 +249,7 @@ int					parse_the_line(t_fdf *fdf)
 		enter_application_and_color_data(fdf, converter.pixel_as_ptr);
 	}
 	set_the_largest_ordinate(fdf);
-	return (SUCCESS);	
+	return (SUCCESS);
 }
 
 int					parse_remaining_lines_and_recognizing_the_max_ordinate(
