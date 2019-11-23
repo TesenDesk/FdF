@@ -19,6 +19,7 @@ void	calculate_default_zoom(t_fdf *fdf)
 	int			max_y;
 	double		k;
 
+	fdf->mutation.stretch.range = DEFAULT_RANGE;
 	perform_rotation(fdf, 0, &c);
 	max_x = SCREEN_WIDTH / 2 - c.x;
 	max_y = SCREEN_HEIGHT / 2 - c.y;
