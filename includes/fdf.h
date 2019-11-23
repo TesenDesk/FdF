@@ -115,6 +115,7 @@ typedef struct			s_cordcase
 {
 	int					x;
 	int					y;
+	int					z;
 }						t_cordcase;
 
 typedef struct			s_wire
