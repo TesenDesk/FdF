@@ -12,16 +12,6 @@
 
 #include "fdf.h"
 
-void	draw_button(t_mlx *mlx, t_drawing *d, char *name)
-{
-	int			leng;
-
-	leng = ft_strlen(name);
-	draw_box(mlx, 10 + (10 * leng), 20,
-			(d->y - 5) * SCREEN_WIDTH + d->x - 5);
-	mlx_string_put(mlx->mlx, mlx->win, d->x, d->y - 7, YELLOW_COLOR, name);
-}
-
 void	draw_filled_box(t_mlx *mlx, t_drawing *d)
 {
 	int			i;
