@@ -6,11 +6,18 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 05:28:51 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 05:32:25 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 07:42:41 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void				move_to_nbr(char **top)
+{
+	while (ft_isspace(**top))
+		++(*top);
+	return ;
+}
 
 int					parse_first_line_and_recognizing_the_max_abscissa(
 						t_fdf *fdf)
@@ -22,6 +29,9 @@ int					parse_first_line_and_recognizing_the_max_abscissa(
 		&top);
 	while (*top)
 	{
+		move_to_nbr(&top);
+		if (!*top)
+			break ;
 		if (parse_applicate(&top, &converter.pixel))
 			return (FAILURE);
 		if (has_color_characteristic(*top))
@@ -46,11 +56,14 @@ int					parse_the_line(t_fdf *fdf)
 
 	move_top_to_the_beginning_of_the_read_line(
 		(char *)ft_vector_get_curr(&fdf->reader.lines), &top);
-	if (!top)
+	if (!*top)
 		return (FAILURE);
 	set_the_abscissa_counter(&x_counter, fdf);
 	while (*top && x_counter--)
 	{
+		move_to_nbr(&top);
+		if (!top)
+			return (FAILURE);
 		if (parse_applicate(&top, &converter.pixel))
 			return (FAILURE);
 		if (has_color_characteristic(*top))
@@ -71,10 +84,13 @@ int					parse_remaining_lines_and_recognizing_the_max_ordinate(
 {
 	while (fdf->reader.read_state > NO_MORE_LINES)
 	{
-		if (
-				read_a_line_and_put_it_into_an_array(&fdf->reader) ||
+		if (read_a_line_and_put_it_into_an_array(&fdf->reader) ||
 				parse_the_line(fdf))
+		{
+			if (!fdf->reader.read_state)
+				continue ;
 			return (FAILURE);
+		}
 	}
 	if (fdf->reader.read_state == ERROR)
 		return (FAILURE);

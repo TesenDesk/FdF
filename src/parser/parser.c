@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 21:22:32 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 05:36:28 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 06:50:38 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,12 @@ int					parse_applicate(char **top, t_pixel *pixel)
 	char			*tip;
 	intmax_t		z;
 
-	if (ft_str_to_intmax(*top, &tip, 10, &z) || *top == tip)
-		return (FAILURE);
-	*top = tip;
-	pixel->z = (int)z;
+	if (**top)
+	{
+		if (ft_str_to_intmax(*top, &tip, 10, &z) || *top == tip)
+			return (FAILURE);
+			*top = tip;
+			pixel->z = (int)z;
+	}
 	return (SUCCESS);
 }
