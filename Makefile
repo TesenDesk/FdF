@@ -6,7 +6,7 @@
 #    By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 18:21:00 by ftothmur          #+#    #+#              #
-#    Updated: 2019/11/23 03:34:52 by ftothmur         ###   ########.fr        #
+#    Updated: 2019/11/23 04:50:50 by ftothmur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,9 @@ DRAW_DIR		:=	$(NAME_SRC_DIR)draw/
 NAME			:=	fdf
 MAIN_SRC		:=	$(addprefix $(NAME_SRC_DIR),main.c)
 PARSER_SRC		:=	$(addprefix $(PARSER_DIR), parser.c)
-DRAW_SRC		:=	$(addprefix $(DRAW_DIR),drawing.c)
+DRAW_SRC		:=	$(addprefix $(DRAW_DIR),drawing.c actions_reactions.c \
+buttons_events.c calculate_coords.c hud_advanced.c hud_basic.c \
+init_and_staff.c preparation_for_drawing.c)
 SRC				:=	$(MAIN_SRC) $(PARSER_SRC) $(DRAW_SRC)
 OBJ				:=	$(patsubst %.c,%.o, $(SRC))
 #----------------------------------includes------------------------------------#
