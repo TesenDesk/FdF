@@ -69,10 +69,11 @@ int		early_mlx_init(t_fdf *fdf)
 			"Mlx initializing complete!");
 	reset_pos(fdf);
 	change_stretch(fdf, 0, 0, 0);
-	fdf->mutation.stretch.range = DEFAULT_RANGE;
 	change_rotate(fdf, 0, 0, 0);
 	fdf->map.size = fdf->map.height * fdf->map.width;
 	fdf->draw_hud = 1;
+	calculate_default_zoom(fdf);
+	change_range(fdf, 0);
 	draw_map(fdf);
 	draw_controls(&fdf->mlx);
 	mlx_hook(fdf->mlx.win, 2, 1UL << 0UL, so_many_buttons, fdf);

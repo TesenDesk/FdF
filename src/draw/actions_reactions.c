@@ -18,15 +18,12 @@ void	change_range(t_fdf *fdf, int mode)
 
 	range = &fdf->mutation.stretch.range;
 	if (!mode)
-		*range = DEFAULT_RANGE;
-	else
-	{
-		*range += CHANGE_RANGE * mode;
-		if (*range > MAX_RANGE)
-			*range = MAX_RANGE;
-		else if (*range < MIN_RANGE)
-			*range = MIN_RANGE;
-	}
+		*range = fdf->default_range;
+	*range += CHANGE_RANGE * mode;
+	if (*range > MAX_RANGE)
+		*range = MAX_RANGE;
+	else if (*range < MIN_RANGE)
+		*range = MIN_RANGE;
 }
 
 void	change_stretch(t_fdf *fdf, int x_mode, int y_mode, int z_mode)

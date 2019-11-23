@@ -12,6 +12,23 @@
 
 #include "fdf.h"
 
+void	calculate_default_zoom(t_fdf *fdf)
+{
+	t_cordcase	c;
+	int			max_x;
+	int			max_y;
+	double		k;
+
+	perform_rotation(fdf, 0, &c);
+	max_x = SCREEN_WIDTH / 2 - c.x;
+	max_y = SCREEN_HEIGHT / 2 - c.y;
+	if (max_y < max_x)
+		k = 0.95 / ((double)max_x * 2 / SCREEN_WIDTH);
+	else
+		k = 0.95 / ((double)max_y * 2 / SCREEN_HEIGHT);
+	fdf->default_range = (int)(DEFAULT_RANGE * k);
+}
+
 void	rotate_x(t_cordcase *c, long double x_rad, long double y_rad,
 															long double z_rad)
 {

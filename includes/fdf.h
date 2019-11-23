@@ -210,6 +210,7 @@ typedef struct			s_fdf
 	t_mutation			mutation;
 	t_mlx				mlx;
 	char				draw_hud;
+	int					default_range;
 }						t_fdf;
 
 /*
@@ -226,7 +227,8 @@ void					set_the_largest_abscissa(t_fdf *fdf);
 void					set_the_largest_ordinate(t_fdf *fdf);
 void					set_the_abscissa_counter(int *x_counter, t_fdf *fdf);
 void					count_applicate(t_fdf *fdf);
-int						enter_application_and_color_data(t_fdf *fdf, void 										*pixel_as_ptr);
+int						enter_application_and_color_data(t_fdf *fdf, void
+							*pixel_as_ptr);
 int						has_color_characteristic(char c);
 int						parse_the_line(t_fdf *fdf);
 int						parse_remaining_lines_and_recognizing_the_max_ordinate(
@@ -234,17 +236,9 @@ int						parse_remaining_lines_and_recognizing_the_max_ordinate(
 int						parse_first_line_and_recognizing_the_max_abscissa(
 							t_fdf *fdf);
 void					set_default_color(t_pixel *pixel);
-int						parse_remaining_lines_and_recognizing_the_max_ordinate(
-							t_fdf *fdf);
 int						convert_string_to_color_number(char **top,
 							t_pixel *pixel);
 int						read_and_parse_the_file(t_fdf *fdf);
-int						validate_read_and_parse(int argc, char **argv,
-							t_fdf *fdf);
-void					move_top_to_the_beginning_of_the_read_line(char *line,
-							char **top);
-void					record_applicate_extremes(t_fdf *fdf);
-int						parse_applicate(char **top, t_pixel *pixel);
 int						read_a_line_and_put_it_into_an_array(t_read *reader);
 int						usage(void);
 int						error(char *error_msg);
@@ -259,14 +253,14 @@ int						need_to_draw_this(t_wire *w);
 void					draw_connection_if_necessary(t_fdf *fdf, t_wire *w);
 void					draw_box(t_mlx *mlx, int w, int h, int where);
 void					draw_connections_to_neighbours(t_fdf *fdf, t_wire *w,
-								int pos);
+							int pos);
 void					perform_rotation(t_fdf *fdf, int i, t_cordcase *ret);
 int						so_many_buttons(int code, void *vfdf);
 void					change_range(t_fdf *fdf, int mode);
 void					change_stretch(t_fdf *fdf, int x_mode, int y_mode,
-								int z_mode);
+							int z_mode);
 void					change_rotate(t_fdf *fdf, int x_mode, int y_mode,
-								int z_mode);
+							int z_mode);
 void					change_hud(t_fdf *fdf);
 void					reset_pos(t_fdf *fdf);
 void					draw_filled_box(t_mlx *mlx, t_drawing *d);
@@ -278,6 +272,7 @@ void					draw_button(t_mlx *mlx, t_drawing *d, char *name);
 int						close_pls(void *param);
 void					draw_controls(t_mlx *mlx);
 void					draw_parameters(t_fdf *fdf);
+void					calculate_default_zoom(t_fdf *fdf);
 void					draw_map(t_fdf *fdf);
 
 #endif
