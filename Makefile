@@ -6,7 +6,7 @@
 #    By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 18:21:00 by ftothmur          #+#    #+#              #
-#    Updated: 2019/11/23 05:08:09 by ftothmur         ###   ########.fr        #
+#    Updated: 2019/11/23 05:37:42 by ftothmur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,9 @@ DRAW_DIR		:=	$(NAME_SRC_DIR)draw/
 #------------------------------------files-------------------------------------#
 NAME			:=	fdf
 MAIN_SRC		:=	$(addprefix $(NAME_SRC_DIR),main.c)
-PARSER_SRC		:=	$(addprefix $(PARSER_DIR), parser.c)
+PARSER_SRC		:=	$(addprefix $(PARSER_DIR), axis_calculations.c \
+make_color_characteristics.c parse_management.c parser.c \
+preparetions.c read_line_and_error_management.c)
 DRAW_SRC		:=	$(addprefix $(DRAW_DIR),drawing.c actions_reactions.c \
 buttons_events.c calculate_coords.c 	hud_advanced.c hud_basic.c \
 init_and_staff.c preparation_for_drawing.c)

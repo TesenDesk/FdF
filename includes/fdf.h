@@ -6,7 +6,7 @@
 /*   By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 20:09:03 by ftothmur          #+#    #+#             */
-/*   Updated: 2019/11/23 05:24:53 by ftothmur         ###   ########.fr       */
+/*   Updated: 2019/11/23 06:06:12 by ftothmur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,42 @@ typedef struct			s_fdf
 
 int						validate_read_and_parse(int argc, char **argv,
 							t_fdf *fdf);
-
+int						parse_applicate(char **top, t_pixel *pixel);
+void					record_applicate_extremes(t_fdf *fdf);
+void					move_top_to_the_beginning_of_the_read_line(char *line,
+							char **top);
+void					set_the_largest_abscissa(t_fdf *fdf);
+void					set_the_largest_ordinate(t_fdf *fdf);
+void					set_the_abscissa_counter(int *x_counter, t_fdf *fdf);
+void					count_applicate(t_fdf *fdf);
+int						enter_application_and_color_data(t_fdf *fdf, void 										*pixel_as_ptr);
+int						has_color_characteristic(char c);
+int						parse_the_line(t_fdf *fdf);
+int						parse_remaining_lines_and_recognizing_the_max_ordinate(
+							t_fdf *fdf);
+int						parse_first_line_and_recognizing_the_max_abscissa(
+							t_fdf *fdf);
+void					set_default_color(t_pixel *pixel);
+int						parse_remaining_lines_and_recognizing_the_max_ordinate(
+							t_fdf *fdf);
+int						convert_string_to_color_number(char **top,
+							t_pixel *pixel);
+int						read_and_parse_the_file(t_fdf *fdf);
+int						validate_read_and_parse(int argc, char **argv,
+							t_fdf *fdf);
+void					move_top_to_the_beginning_of_the_read_line(char *line,
+							char **top);
+void					record_applicate_extremes(t_fdf *fdf);
+int						parse_applicate(char **top, t_pixel *pixel);
+int						read_a_line_and_put_it_into_an_array(t_read *reader);
+int						usage(void);
+int						error(char *error_msg);
+void					clear_work_structure(t_fdf *fdf);
+int						prepare_storage_for_recognized_map_information(
+							t_map *map);
+int						prepare_storage_for_reading_lines(t_read *reader);
+int						use_terminal_arguments_to_open_a_file(int argc,
+							char **argv, t_read *reader);
 int						early_mlx_init(t_fdf *fdf);
 int						need_to_draw_this(t_wire *w);
 void					draw_connection_if_necessary(t_fdf *fdf, t_wire *w);
