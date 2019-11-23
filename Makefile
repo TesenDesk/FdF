@@ -6,7 +6,7 @@
 #    By: ftothmur <ftothmur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 18:21:00 by ftothmur          #+#    #+#              #
-#    Updated: 2019/11/23 01:05:29 by ftothmur         ###   ########.fr        #
+#    Updated: 2019/11/23 03:34:52 by ftothmur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ $(NAME):			$(SRC) $(OBJ) $(HEADERS) $(LIB)
 obj-files accepted.$(RST)\n" ' '
 				@printf "$(PREFIX)📦  Building $(NAME)...\n"
 #				@gcc -o $(NAME) $(OBJ) $(HDR_FLAGS) $(LIB_FLAGS) $(CFLAGS)
-				cc -o $(NAME) $(SRC) $(HDR_FLAGS) $(LIB_FLAGS)i -g
+				cc -o $(NAME) $(SRC) $(HDR_FLAGS) $(LIB_FLAGS) -g
 
 $(LIB):				lib
 
